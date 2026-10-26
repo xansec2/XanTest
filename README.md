@@ -1,6 +1,5 @@
 # XanTest
 
-<img width="1761" height="1061" alt="image" src="https://github.com/user-attachments/assets/fd138a3d-7ba3-406f-8205-4bfcc0788af1" />
 
 **XanTest** is a command console for offensive-security work: a curated catalog of
 pentest and bug-bounty tools whose command lines you assemble by picking a tool,
@@ -92,7 +91,6 @@ and write, so a project created anywhere shows up everywhere. (Older per-mode
 lists — `web`, `active-directory`, `linux`, `setup` — are picked up and merged
 automatically.)
 
-<img width="1573" height="1072" alt="XanTest browser view" src="https://github.com/user-attachments/assets/a55ccc5d-6aea-4e17-be1a-83f1c59f6321" />
 
 A few things to know:
 
@@ -156,7 +154,6 @@ A few things to know:
 
 ### Application Map (Obsidian-style canvas)
 
-<img width="1777" height="1077" alt="image" src="https://github.com/user-attachments/assets/e01f32a7-16d9-442e-813e-9323bd3fd9a1" />
 
 The **Application Map** tab (top-left toggle, alongside web / AD / Linux / …)
 draws a per-project, Obsidian-style canvas of the whole engagement and **builds
