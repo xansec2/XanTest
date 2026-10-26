@@ -84,6 +84,8 @@
   }
   .mark .dot { width: 11px; height: 11px; border-radius: 50%;
     background: var(--green); box-shadow: 0 0 14px var(--green); }
+  .mark .qmark { width: 22px; height: 22px; flex: none; color: var(--green);
+    filter: drop-shadow(0 0 10px rgba(158,206,106,0.55)); }
 
   .hero { position: relative; max-width: 460px; }
   .hero h1 {
@@ -204,11 +206,21 @@
       <circle class="node g" cx="330" cy="650" r="6" style="animation-delay:2.8s"/>
     </svg>
 
-    <div class="mark"><span class="dot"></span>{{TITLE}} · pentest suite</div>
+    <div class="mark">
+      <svg class="qmark" viewBox="0 0 32 32" aria-hidden="true" fill="none"
+           stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="translate(16 26)">
+          <g transform="rotate(-22)"><path d="M0 0 L0 -19"/><path d="M-4.2 -14.5 L0 -19 L4.2 -14.5"/></g>
+          <g><path d="M0 0 L0 -22"/><path d="M-4.2 -17.5 L0 -22 L4.2 -17.5"/></g>
+          <g transform="rotate(22)"><path d="M0 0 L0 -19"/><path d="M-4.2 -14.5 L0 -19 L4.2 -14.5"/></g>
+        </g>
+      </svg>
+      {{TITLE}} · command console
+    </div>
 
     <div class="hero">
-      <h1>Map the attack surface.<br><span class="grad">One command at a time.</span></h1>
-      <p>Catalog, scope, and launch your tooling from a single localhost console. Sign in to pick up your engagements.</p>
+      <h1>Your offensive toolkit,<br><span class="grad">ready to draw.</span></h1>
+      <p>Assemble, scope, and fire your tooling across web, Active Directory, Linux privesc, and reverse-shell loadouts — from one localhost console. Sign in to pick up your engagements.</p>
     </div>
 
     <div class="boot">

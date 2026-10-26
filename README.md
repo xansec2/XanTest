@@ -1,8 +1,8 @@
-# Quiver
+# XanTest
 
 <img width="1761" height="1061" alt="image" src="https://github.com/user-attachments/assets/fd138a3d-7ba3-406f-8205-4bfcc0788af1" />
 
-**Quiver** is a command console for offensive-security work: a curated catalog of
+**XanTest** is a command console for offensive-security work: a curated catalog of
 pentest and bug-bounty tools whose command lines you assemble by picking a tool,
 toggling its flags, and watching the command build live — then copy it into your
 proxy or run it in place. It runs two ways from one Go codebase:
@@ -92,7 +92,7 @@ and write, so a project created anywhere shows up everywhere. (Older per-mode
 lists — `web`, `active-directory`, `linux`, `setup` — are picked up and merged
 automatically.)
 
-<img width="1573" height="1072" alt="Quiver browser view" src="https://github.com/user-attachments/assets/a55ccc5d-6aea-4e17-be1a-83f1c59f6321" />
+<img width="1573" height="1072" alt="XanTest browser view" src="https://github.com/user-attachments/assets/a55ccc5d-6aea-4e17-be1a-83f1c59f6321" />
 
 A few things to know:
 
@@ -430,7 +430,7 @@ command.
 
 ## Safety
 
-Quiver builds commands and, only when you explicitly run them (`ctrl+r` in the
+XanTest builds commands and, only when you explicitly run them (`ctrl+r` in the
 TUI, **Run** in the browser), executes them on the machine serving the app. The
 browser view is localhost-only, same-origin-checked, and behind an account gate;
 the scope block refuses any assembled command that would touch an out-of-scope

@@ -82,6 +82,8 @@
   }
   .mark .dot { width: 11px; height: 11px; border-radius: 50%;
     background: var(--magenta); box-shadow: 0 0 14px var(--magenta); }
+  .mark .qmark { width: 22px; height: 22px; flex: none; color: var(--magenta);
+    filter: drop-shadow(0 0 10px rgba(187,154,247,0.55)); }
 
   .hero { position: relative; max-width: 460px; }
   .hero h1 {
@@ -205,11 +207,21 @@
       <circle class="node g" cx="340" cy="680" r="6" style="animation-delay:2.8s"/>
     </svg>
 
-    <div class="mark"><span class="dot"></span>{{TITLE}} · pentest suite</div>
+    <div class="mark">
+      <svg class="qmark" viewBox="0 0 32 32" aria-hidden="true" fill="none"
+           stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="translate(16 26)">
+          <g transform="rotate(-22)"><path d="M0 0 L0 -19"/><path d="M-4.2 -14.5 L0 -19 L4.2 -14.5"/></g>
+          <g><path d="M0 0 L0 -22"/><path d="M-4.2 -17.5 L0 -22 L4.2 -17.5"/></g>
+          <g transform="rotate(22)"><path d="M0 0 L0 -19"/><path d="M-4.2 -14.5 L0 -19 L4.2 -14.5"/></g>
+        </g>
+      </svg>
+      {{TITLE}} · command console
+    </div>
 
     <div class="hero">
-      <h1>Set up your<br><span class="grad">operator account.</span></h1>
-      <p>Your projects, scope guards, and tool catalogs — all behind one local login. It takes ten seconds.</p>
+      <h1>Your offensive<br><span class="grad">toolkit.</span></h1>
+      <p>Your projects, scope guards, and tool catalogs — web, AD, Linux, and reverse-shell loadouts — all behind one local login. It takes ten seconds.</p>
     </div>
 
     <div class="boot">

@@ -23,7 +23,7 @@ import (
 // command, with the command's output streamed back live. Running is gated by
 // the active project's scope exactly like ctrl+r in the TUI.
 const (
-	webTitle    = "Web"
+	webTitle    = "XanTest"
 	defaultPort = 7702
 )
 
@@ -50,11 +50,13 @@ type webMode struct {
 // the web catalog is read after payloads.go's init() has appended to it.
 func webModes() []webMode {
 	return []webMode{
-		{Key: "setup", Label: "setup", tools: func() []Tool { return setupCatalog }},
-		{Key: "web", Label: "web", tools: func() []Tool { return catalog }},
+		{Key: "setup", Label: "Setup", tools: func() []Tool { return setupCatalog }},
+		{Key: "footprinting", Label: "Footprinting", tools: func() []Tool { return footprintingCatalog }},
+		{Key: "web", Label: "Web", tools: func() []Tool { return catalog }},
 		{Key: "ad", Label: "AD", tools: func() []Tool { return adCatalog }},
 		{Key: "linux", Label: "Linux", tools: func() []Tool { return linuxCatalog }},
 		{Key: "revshell", Label: "Reverse Shells", tools: func() []Tool { return revshellCatalog }},
+		{Key: "filetransfer", Label: "File Transfers", tools: func() []Tool { return fileTransferCatalog }},
 	}
 }
 
@@ -76,6 +78,10 @@ func modeFor(key string) (webMode, bool) {
 // runWeb serves the catalog on localhost and, if open is set, points the
 // default browser at it. It blocks until the process exits.
 func runWeb(port int, open bool) error {
+	// Load .env (if present) before anything resolves entitlements, so the
+	// Supabase/license config is in the environment.
+	loadDotEnv()
+
 	page, err := buildPage()
 	if err != nil {
 		return err
@@ -126,6 +132,9 @@ func runWeb(port int, open bool) error {
 		w.Header().Set("Cache-Control", "no-store")
 		json.NewEncoder(w).Encode(map[string]string{"user": sessionUser(r)})
 	})
+	// Monetization: the browser reads this to show locks / an upgrade prompt.
+	// The server still enforces each paid feature on its own endpoint below.
+	mux.HandleFunc("GET /api/entitlement", requireAuth(handleEntitlement))
 	// Live refresh of the shared project list. The mode param is accepted (and
 	// validated) for backward compatibility, but the list is the same for all.
 	mux.HandleFunc("GET /api/projects", requireAuth(func(w http.ResponseWriter, r *http.Request) {
@@ -148,10 +157,21 @@ func runWeb(port int, open bool) error {
 		json.NewEncoder(w).Encode(projects)
 	}))
 	mux.HandleFunc("POST /api/projects", requireAuth(handleProjects))
-	mux.HandleFunc("POST /api/run", requireAuth(handleRun))
+	// Paid features: assembling-and-running commands and the live terminals are
+	// gated behind an active plan (requireFeature → 402 when locked). In the
+	// default local/self-hosted mode every signed-in user is Pro, so this is a
+	// no-op until LICENSE_MODE=supabase enforces subscriptions.
+	mux.HandleFunc("POST /api/run", requireAuth(requireFeature(FeatureRun, handleRun)))
 	// Interactive shell(s) for the split-screen terminal workspace. Each socket
 	// is one PTY-backed shell; the page opens one per pane.
-	mux.HandleFunc("GET /api/terminal", requireAuth(handleTerminal))
+	mux.HandleFunc("GET /api/terminal", requireAuth(requireFeature(FeatureTerminal, handleTerminal)))
+
+	// AI agent: the operator's own local, OpenAI-compatible model evaluates tool
+	// output. Config (base URL / model / key) is free to set; actually running an
+	// evaluation is the paid feature, gated like Run and Terminal.
+	mux.HandleFunc("GET /api/ai/config", requireAuth(handleAIConfig))
+	mux.HandleFunc("POST /api/ai/config", requireAuth(handleAIConfig))
+	mux.HandleFunc("POST /api/ai/evaluate", requireAuth(requireFeature(FeatureAI, handleAIEvaluate)))
 
 	url := fmt.Sprintf("http://localhost:%d/", port)
 	fmt.Printf("%s → %s   (ctrl+c to stop)\n", webTitle, url)
