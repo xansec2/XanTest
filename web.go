@@ -23,7 +23,7 @@ import (
 // command, with the command's output streamed back live. Running is gated by
 // the active project's scope exactly like ctrl+r in the TUI.
 const (
-	webTitle    = "XanTest"
+	webTitle    = "Nocturn"
 	defaultPort = 7702
 )
 
@@ -132,6 +132,7 @@ func runWeb(port int, open bool) error {
 		w.Header().Set("Cache-Control", "no-store")
 		json.NewEncoder(w).Encode(map[string]string{"user": sessionUser(r)})
 	})
+
 	// Monetization: the browser reads this to show locks / an upgrade prompt.
 	// The server still enforces each paid feature on its own endpoint below.
 	mux.HandleFunc("GET /api/entitlement", requireAuth(handleEntitlement))

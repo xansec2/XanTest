@@ -1,8 +1,8 @@
-# XanTest
+# Nocturn
 
 <img width="1612" height="1055" alt="image" src="https://github.com/user-attachments/assets/22fa8262-58bd-40b6-ac3e-870bdfb2ae8e" />
 
-**XanTest** is a command console for offensive-security work: a curated catalog of
+**Nocturn** is a command console for offensive-security work: a curated catalog of
 pentest and bug-bounty tools whose command lines you assemble by picking a tool,
 toggling its flags, and watching the command build live — then copy it into your
 proxy or run it in place. It runs two ways from one Go codebase:
@@ -91,7 +91,6 @@ Projects are **shared** across modes: the list lives in one file
 and write, so a project created anywhere shows up everywhere. (Older per-mode
 lists — `web`, `active-directory`, `linux`, `setup` — are picked up and merged
 automatically.)
-
 
 A few things to know:
 
@@ -428,7 +427,7 @@ command.
 
 ## Safety
 
-XanTest builds commands and, only when you explicitly run them (`ctrl+r` in the
+Nocturn builds commands and, only when you explicitly run them (`ctrl+r` in the
 TUI, **Run** in the browser), executes them on the machine serving the app. The
 browser view is localhost-only, same-origin-checked, and behind an account gate;
 the scope block refuses any assembled command that would touch an out-of-scope
