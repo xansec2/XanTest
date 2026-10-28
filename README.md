@@ -1,7 +1,5 @@
 # Nocturn
 
-<img width="1612" height="1055" alt="image" src="https://github.com/user-attachments/assets/22fa8262-58bd-40b6-ac3e-870bdfb2ae8e" />
-
 **Nocturn** is a command console for offensive-security work: a curated catalog of
 pentest and bug-bounty tools whose command lines you assemble by picking a tool,
 toggling its flags, and watching the command build live — then copy it into your
