@@ -10,10 +10,65 @@ if [ -x "$HOME/go-sdk/go/bin/go" ]; then
 	export PATH="$HOME/go-sdk/go/bin:$PATH"
 fi
 
+# If Go still isn't available, try to install it automatically. This targets a
+# Kali VM (Debian-based) but works on any Linux: it drops a fresh toolchain into
+# ~/go-sdk/go, the same path the block above looks for, so re-runs are cheap.
+install_go() {
+	local version="1.27.0"
+	local arch
+	case "$(uname -m)" in
+		x86_64|amd64)  arch="amd64" ;;
+		aarch64|arm64) arch="arm64" ;;
+		armv6l|armv7l) arch="armv6l" ;;
+		i386|i686)     arch="386" ;;
+		*)
+			echo "run.sh: unsupported architecture '$(uname -m)' for auto-install." >&2
+			return 1
+			;;
+	esac
+
+	local tarball="go${version}.linux-${arch}.tar.gz"
+	local url="https://go.dev/dl/${tarball}"
+	local tmp
+	tmp="$(mktemp -d)"
+
+	echo "run.sh: 'go' not found — installing Go ${version} to ~/go-sdk/go ..." >&2
+
+	local fetch
+	if command -v curl >/dev/null 2>&1; then
+		fetch="curl -fsSL -o"
+	elif command -v wget >/dev/null 2>&1; then
+		fetch="wget -qO"
+	else
+		echo "run.sh: need curl or wget to download Go (apt-get install -y curl)." >&2
+		rm -rf "$tmp"
+		return 1
+	fi
+
+	if ! $fetch "$tmp/$tarball" "$url"; then
+		echo "run.sh: failed to download $url" >&2
+		rm -rf "$tmp"
+		return 1
+	fi
+
+	mkdir -p "$HOME/go-sdk"
+	rm -rf "$HOME/go-sdk/go"
+	if ! tar -C "$HOME/go-sdk" -xzf "$tmp/$tarball"; then
+		echo "run.sh: failed to extract $tarball" >&2
+		rm -rf "$tmp"
+		return 1
+	fi
+
+	rm -rf "$tmp"
+	export PATH="$HOME/go-sdk/go/bin:$PATH"
+}
+
 if ! command -v go >/dev/null 2>&1; then
-	echo "run.sh: 'go' not found on PATH." >&2
-	echo "Install Go 1.27+ (or put it at ~/go-sdk/go) and try again." >&2
-	exit 1
+	if ! install_go || ! command -v go >/dev/null 2>&1; then
+		echo "run.sh: 'go' not found on PATH and auto-install failed." >&2
+		echo "Install Go 1.27+ (or put it at ~/go-sdk/go) and try again." >&2
+		exit 1
+	fi
 fi
 
 # Pure-Go build: the --web server pulls in net/http, and the system gcc here
